@@ -14,6 +14,8 @@ class Instruction: public Operator
         virtual bool IsInstruction() const;
         
         virtual bool IsInstructionList() const;
+
+        virtual bool IsReturn() const { return false; }
 };
 
 #endif /* __INSTRUCTION_HPP__ */

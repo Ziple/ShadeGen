@@ -4,8 +4,8 @@
 IfElseBlock::IfElseBlock(
     Context* ctx,
     const std::vector<Operator*> conditions,
-    const std::vector<Instruction*> blocks,
-    Instruction* elseBlock
+    const std::vector<InstructionList*> blocks,
+    InstructionList* elseBlock
     ):
  Instruction( ctx ),
  myHasElseBlock(elseBlock != 0)
@@ -51,11 +51,13 @@ std::string IfElseBlock::ToString( const PrintingContext& pctx ) const
     return str;
 }
 
-Operator* IfElseBlock::Simplified( Context* nctx )
+Operator* IfElseBlock::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
     std::vector<Operator*> sconditions;
-    std::vector<Instruction*> sblocks;
-    Instruction* selseBlock = myHasElseBlock ? reinterpret_cast<Instruction*>( mySubOps[mySubOps.size()-1]->Simplified(nctx) ) : 0;
+    std::vector<InstructionList*> sblocks;
+    InstructionList* selseBlock = myHasElseBlock ? reinterpret_cast<InstructionList*>( mySubOps[mySubOps.size()-1]->Simplified(nctx, table) ) : 0;
     
     size_t numPairs = 0;
     
@@ -68,8 +70,8 @@ Operator* IfElseBlock::Simplified( Context* nctx )
     
      for( size_t i = 0; i < numPairs; i++ )
      {
-         Operator* scondition = mySubOps[i]->Simplified(nctx);
-         Instruction* sblock = reinterpret_cast<Instruction*>( mySubOps[ numPairs + i ]->Simplified(nctx) );
+         Operator* scondition = mySubOps[i]->Simplified(nctx, table);
+         InstructionList* sblock = reinterpret_cast<InstructionList*>( mySubOps[ numPairs + i ]->Simplified(nctx, table) );
          
          if( scondition->IsOne() )
              return sblock;
@@ -82,6 +84,8 @@ Operator* IfElseBlock::Simplified( Context* nctx )
     
     if( sconditions.size() > 0 )
         return new IfElseBlock( nctx, sconditions, sblocks, selseBlock );
+    else if( selseBlock != 0 )
+        return selseBlock;
     else
-        return selseBlock != 0 ? selseBlock : new NoOperation( nctx );
+        return new NoOperation( nctx );
 }

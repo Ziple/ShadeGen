@@ -5,6 +5,7 @@
 #include <Intrinsics/Division.hpp>
 #include <Constant.hpp>
 #include <Intrinsics/Log.hpp>
+#include <Types/Type.hpp>
 
 #include <cmath>
 
@@ -12,10 +13,12 @@ Power::Power( Context* ctx, Operator* first, Operator* second) :
  BinaryOperator( ctx, first, second )
 {}
 
-Operator* Power::Simplified( Context* nctx )
+Operator* Power::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
-    Operator* sf = mySubOps[0]->Simplified(nctx);
-    Operator* ss = mySubOps[1]->Simplified(nctx);
+    Operator* sf = mySubOps[0]->Simplified(nctx, table);
+    Operator* ss = mySubOps[1]->Simplified(nctx, table);
     
     if( sf->IsConstant() && ss->IsConstant() )
     {
@@ -35,4 +38,20 @@ Operator* Power::Simplified( Context* nctx )
 std::string Power::ToString(const PrintingContext& pctx) const
 {
     return "(" + mySubOps[0]->ToString(pctx.InlineWriting()) + "^" + mySubOps[1]->ToString(pctx.InlineWriting()) + ")";
+}
+
+void Power::ResolveTypes()
+{
+    Operator* fst = mySubOps[0];
+    fst->ResolveTypes();
+
+    Operator* snd = mySubOps[1];
+    snd->ResolveTypes();
+
+    if( !snd->GetType()->IsScalar() )
+        myType = new ErrorType(
+            reinterpret_cast<GlobalContext*>( myContext->GetGlobalContext() ),
+            "The exponent is not a scalar" );
+    else
+        myType = fst->GetType();
 }

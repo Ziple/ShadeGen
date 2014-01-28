@@ -19,8 +19,14 @@ public:
     }
     
     virtual ~Type();
+
+    virtual Type* Clone( GlobalContext* nctx ) const = 0;
     
     const std::string& GetName() const { return myTypeName; }
+
+    virtual const std::string& GetReducedName() const { return myTypeName; }
+
+    virtual bool IsKnownType() const {return true;}
     
     virtual bool IsError() const {return false;}
     
@@ -48,8 +54,23 @@ public:
     VoidType( GlobalContext* ctx ):
      Type( ctx, "void" )
     {}
+
+    Type* Clone( GlobalContext* nctx ) const { return new VoidType( nctx ); }
     
     bool IsVoid() const {return true;}
+};
+
+class UnknownType: public Type
+{
+public:
+    
+    UnknownType( GlobalContext* ctx ):
+        Type( ctx, "unknown" )
+    {}
+    
+    Type* Clone( GlobalContext* nctx ) const { return new UnknownType( nctx ); }
+
+    bool IsKnownType() const {return false;}
 };
 
 class ErrorType: public Type
@@ -61,6 +82,8 @@ public:
      myErrorString( errstr )
     {}
     
+    Type* Clone( GlobalContext* nctx ) const { return new ErrorType( nctx, myErrorString ); }
+
     bool IsError() const {return true;}
     
     const std::string& GetErrorString() const {return myErrorString;}

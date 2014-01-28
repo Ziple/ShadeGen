@@ -23,6 +23,8 @@ public:
      Type( ctx, name ),
      myFields( fields )
     {}
+
+    Type* Clone( GlobalContext* nctx ) const;
     
     bool IsStructure() const { return true; }
     

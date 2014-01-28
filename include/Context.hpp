@@ -7,6 +7,7 @@
 
 class Operator;
 class Function;
+class Type;
 
 class Context
 {
@@ -15,7 +16,11 @@ class Context
         Context( Context* parent = 0 );
         
         virtual ~Context();
+
+        virtual Context* GetGlobalContext() { return myParent != 0 ? myParent->GetGlobalContext() : 0; }
         
+        Type* GetTypeByName( const std::string& name );
+
         virtual void RegisterFunction( Function* fn );
         
         virtual void UnregisterFunction( Function* fn );
@@ -33,6 +38,7 @@ class Context
     protected:
         
         Context* myParent;
+        std::vector<Type*> myRegisteredTypes;
         std::vector<Operator*> myRegisteredOperators;
         std::vector<std::string> myRegisteredVariableNames;
 };

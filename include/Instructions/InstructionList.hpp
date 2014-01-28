@@ -5,9 +5,13 @@
 
 #include <vector>
 
+class Return;
+
 class InstructionList: public Instruction
 {
 public:
+
+    InstructionList( Context* ctx, Instruction* ins );
     
     InstructionList( Context* ctx, std::vector<Instruction*> ops  = std::vector<Instruction*>() );
     
@@ -17,7 +21,15 @@ public:
     
     std::string ToString( const PrintingContext& pctx = PrintingContext() ) const;
     
-    Operator* Simplified( Context* nctx );
+    Operator* Simplified( Context* nctx, TypeCorrespondanceTable& correspondanceTable );
+
+    const std::vector<Return*> GetReturnInstructions() const { return myReturnInstructions; }
+
+protected:
+
+    void BuildReturnInstructionCache();
+
+    std::vector<Return*> myReturnInstructions;
 };
 
 #endif /* __INSTRUCTIONLIST_HPP__ */

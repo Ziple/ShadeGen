@@ -2,6 +2,7 @@
 #define __SC_GLOBALCONTEXT_HPP__
 
 #include "Context.hpp"
+#include "Operator.hpp"
 
 #include <string>
 #include <vector>
@@ -17,12 +18,14 @@ class GlobalContext: public Context
     public:
         
         GlobalContext();
+
+        Context* GetGlobalContext() { return this; }
+
+        bool IsTypeDeclared( Type* tp ) const;
         
         void RegisterType( Type* tp );
         
         void UnregisterType( Type* tp );
-        
-        Type* GetTypeByName( const std::string& name );
         
         void DeclareType( Type* tp );
         
@@ -33,14 +36,19 @@ class GlobalContext: public Context
         void UnregisterFunction( Function* fn );
         
         void SetMainFunction( Function* m );
+
+        void CopyTypesToContext(
+            GlobalContext* nctx,
+            Operator::TypeCorrespondanceTable& correspondanceTable ) const;
         
-        GlobalContext* Simplify();
+        GlobalContext* Simplify() const;
+
+        void ResolveTypes();
         
         std::string ToString();
         
     protected:
         
-        std::vector<Type*> myRegisteredTypes;
         std::vector<Type*> myDeclaredTypes;
         std::vector<Function*> myRegisteredFunctions;
         Function* myMainFunction;

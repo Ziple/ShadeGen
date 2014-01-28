@@ -2,11 +2,18 @@
 #include <GlobalContext.hpp>
 #include <Variable.hpp>
 
-Operator::Operator( Context* ctx, const std::vector<Operator*> subops ):
+Operator::Operator(
+    Context* ctx,
+    const std::vector<Operator*> subops,
+    Type* type ):
     myContext( ctx ),
-    mySubOps( subops )
+    mySubOps( subops ),
+    myType( type )
 {
     myContext->RegisterOperator( this );
+
+    if( type == 0 )
+        myType = ctx->GetTypeByName( "unknown" );
 }
         
 Operator::~Operator()

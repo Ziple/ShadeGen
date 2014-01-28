@@ -1,7 +1,10 @@
 #include <Constant.hpp>
 
-Constant::Constant(Context* ctx, double val) :
- Operator( ctx ),
+Constant::Constant(
+    Context* ctx,
+    double val,
+    Type* type ) :
+ Operator( ctx, std::vector<Operator*>(), type ),
  myValue( val )
 {}
 

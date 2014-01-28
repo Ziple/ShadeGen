@@ -8,6 +8,8 @@ class UnaryOperator: public Operator
     public:
         
         UnaryOperator( Context* ctx, Operator* op );
+
+        void ResolveType();
 };
 
 #endif // __SC_UNARYOPERATOR_HPP__

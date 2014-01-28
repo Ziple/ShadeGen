@@ -40,13 +40,15 @@ std::string FunctionCall::ToString( const PrintingContext& pctx ) const
     return str;
 }
 
-Operator* FunctionCall::Simplified( Context* nctx )
+Operator* FunctionCall::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
     std::vector<Operator*> sargs;
     for( std::vector<Operator*>::iterator it = mySubOps.begin();
         it != mySubOps.end();
         it++ )
-        sargs.push_back( (*it)->Simplified( nctx ) );
+        sargs.push_back( (*it)->Simplified( nctx, table ) );
     
-    return new FunctionCall( nctx, reinterpret_cast<Function*>(myCalledFunction->Simplified(nctx)), sargs );
+    return new FunctionCall( nctx, reinterpret_cast<Function*>(myCalledFunction->Simplified(nctx, table)), sargs );
 }

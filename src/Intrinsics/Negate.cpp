@@ -5,9 +5,11 @@ Negate::Negate( Context* ctx, Operator* op) :
 UnaryOperator( ctx, op )
 {}
 
-Operator* Negate::Simplified( Context* nctx )
+Operator* Negate::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
-    Operator* sop = mySubOps[0]->Simplified(nctx);
+    Operator* sop = mySubOps[0]->Simplified(nctx, table);
     
     if( sop->IsConstant() )
         return new Constant( nctx, - reinterpret_cast<Constant*>(sop)->GetValue() );

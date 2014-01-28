@@ -11,7 +11,9 @@ public:
     
     std::string ToString(const PrintingContext& pctx = PrintingContext()) const;
     
-    Operator* Simplified( Context* nctx );
+    Operator* Simplified( Context* nctx, TypeCorrespondanceTable& correspondanceTable );
+
+    void ResolveTypes();
 };
 
 #endif // __SC_DIVISION_HPP__

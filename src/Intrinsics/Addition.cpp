@@ -7,10 +7,12 @@ Addition::Addition(Context* ctx, Operator* first, Operator* second) :
  BinaryOperator( ctx, first, second )
 {}
 
-Operator* Addition::Simplified( Context* nctx )
+Operator* Addition::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& correspondanceTable )
 {
-    Operator* sf = mySubOps[0]->Simplified(nctx);
-    Operator* ss = mySubOps[1]->Simplified(nctx);
+    Operator* sf = mySubOps[0]->Simplified(nctx, correspondanceTable);
+    Operator* ss = mySubOps[1]->Simplified(nctx, correspondanceTable);
     
     if( sf->IsConstant() && ss->IsConstant() )
     {
@@ -18,7 +20,7 @@ Operator* Addition::Simplified( Context* nctx )
         Constant* css = reinterpret_cast<Constant*>(ss);
         
         double v = csf->GetValue() + css->GetValue();
-        return new Constant( nctx, v );
+        return new Constant( nctx, v, correspondanceTable[GetType()] );
     }
     else if( sf->IsNull() )
         return ss;

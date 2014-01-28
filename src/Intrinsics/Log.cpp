@@ -4,13 +4,15 @@
 
 #include <cmath>
 
-Log::Log( Context* ctx, Operator* op) :
+Log::Log( Context* ctx, Operator* op ) :
  UnaryOperator( ctx, op )
 {}
 
-Operator* Log::Simplified( Context* nctx )
+Operator* Log::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
-    Operator* op = mySubOps[0]->Simplified(nctx);
+    Operator* op = mySubOps[0]->Simplified(nctx, table);
     
     if( op->IsConstant() )
         return new Constant( nctx, std::log( reinterpret_cast<Constant*>(op)->GetValue() ) );

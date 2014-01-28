@@ -13,7 +13,9 @@ std::string Return::ToString( const PrintingContext& pctx ) const
     return pctx.Tabs() + "return " + mySubOps[0]->ToString( pctx.InlineWriting() ) + ";";
 }
 
-Operator* Return::Simplified( Context* nctx )
+Operator* Return::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
-    return new Return( nctx, mySubOps[0]->Simplified(nctx) );
+    return new Return( nctx, mySubOps[0]->Simplified(nctx, table) );
 }

@@ -11,7 +11,7 @@ public:
     
     std::string ToString(const PrintingContext& pctx = PrintingContext()) const;
         
-    Operator* Simplified( Context* nctx );
+    Operator* Simplified( Context* nctx, TypeCorrespondanceTable& correspondanceTable );
 };
 
 #endif // __SC_INVERSE_HPP__

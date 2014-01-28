@@ -11,6 +11,7 @@ GlobalContext::GlobalContext():
  myMainFunction( 0 )
 {
     new VoidType( this );
+    new UnknownType( this );
     
     // scalar types
     new BoolType( this );
@@ -29,9 +30,25 @@ GlobalContext::GlobalContext():
     new Matrix3x3FloatType( this );
 }
 
+bool GlobalContext::IsTypeDeclared( Type* tp ) const
+{
+    return std::find( myDeclaredTypes.begin(), myDeclaredTypes.end(), tp ) != myDeclaredTypes.end();
+}
+
 void GlobalContext::RegisterType( Type* tp )
 {
-    if( std::find( myRegisteredTypes.begin(), myRegisteredTypes.end(), tp ) == myRegisteredTypes.end() )
+    bool canInsert = true;
+
+    for( size_t i = 0; i < myRegisteredTypes.size(); i++ )
+    {
+        if( myRegisteredTypes[i]->GetName() == tp->GetName() )
+        {
+            canInsert = false;
+            break;
+        }
+    }
+
+    if( canInsert )
         myRegisteredTypes.push_back( tp );
 }
         
@@ -40,20 +57,6 @@ void GlobalContext::UnregisterType( Type* tp )
     std::vector<Type*>::iterator pos = std::find( myRegisteredTypes.begin(), myRegisteredTypes.end(), tp );
     if( pos != myRegisteredTypes.end() )
         myRegisteredTypes.erase( pos );
-}
-
-Type* GlobalContext::GetTypeByName( const std::string& name )
-{
-    Type* ret = 0;
-    
-    for( size_t i = 0; i < myRegisteredTypes.size(); i++ )
-        if( myRegisteredTypes[i]->GetName() == name )
-        {
-            ret = myRegisteredTypes[i];
-            break;
-        }
-        
-    return ret;
 }
 
 void GlobalContext::DeclareType( Type* tp )
@@ -88,10 +91,40 @@ void GlobalContext::SetMainFunction( Function* m )
     myMainFunction = m;
 }
 
-GlobalContext* GlobalContext::Simplify()
+void GlobalContext::CopyTypesToContext(
+    GlobalContext* nctx,
+    Operator::TypeCorrespondanceTable& correspondanceTable ) const
 {
-    
-    return this;
+    for( size_t i = 0; i < myRegisteredTypes.size(); i++ )
+    {
+        Type* ntp = myRegisteredTypes[i]->Clone( nctx );
+        correspondanceTable[ myRegisteredTypes[i] ] = ntp;
+
+        if( IsTypeDeclared( myRegisteredTypes[i] ) )
+            nctx->DeclareType( ntp );
+    }
+}
+
+GlobalContext* GlobalContext::Simplify() const
+{
+    GlobalContext* ret = new GlobalContext();
+    Operator::TypeCorrespondanceTable correspondanceTable;
+
+    CopyTypesToContext( ret, correspondanceTable );
+
+    if( myMainFunction != 0 )
+        myMainFunction->Simplified(ret, correspondanceTable);
+    else
+        for( size_t i = 0; i < myRegisteredFunctions.size(); i++ )
+            myRegisteredFunctions[i]->Simplified( ret, correspondanceTable );
+
+    return ret;
+}
+
+void GlobalContext::ResolveTypes()
+{
+    for( size_t i = 0; i < myRegisteredFunctions.size(); i++ )
+            myRegisteredFunctions[i]->ResolveTypes();
 }
 
 std::string GlobalContext::ToString()

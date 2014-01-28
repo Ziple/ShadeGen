@@ -2,6 +2,8 @@
 #include <GlobalContext.hpp>
 #include <Variable.hpp>
 #include <Instructions/InstructionList.hpp>
+#include <Types/Type.hpp>
+
 #include <algorithm>
 
 Function::Function(
@@ -22,12 +24,14 @@ Function::~Function()
     myContext->UnregisterFunction( this );
 }
 
-Operator* Function::Simplified( Context* nctx )
+Operator* Function::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
     Instruction* simpls = 0;
     
     if( mySubOps.size() > 0 )
-        simpls = reinterpret_cast<Instruction*>( mySubOps[0]->Simplified(nctx));
+        simpls = reinterpret_cast<Instruction*>( mySubOps[0]->Simplified(nctx, table));
     
     if( simpls->IsNoOp() )
         return new Function( nctx, myName, 0 );
@@ -44,16 +48,16 @@ Operator* Function::Simplified( Context* nctx )
 std::string Function::ToString( const PrintingContext& pctx ) const
 {
     std::string tabs = pctx.Tabs();
-    std::string str = tabs + myName + "( ";
+    std::string str = tabs + GetType()->GetName() + " " + myName + "( ";
     
     const std::vector<const Variable*> vars = GetVariables();
     
     if( vars.size() > 0 )
     {
         for( size_t i = 0; i < vars.size() - 1; i++ )
-            str += (vars[i]->ToString(pctx.InlineWriting()) + ", ");
+            str += (vars[i]->GetType()->GetName() + " " + vars[i]->ToString(pctx.InlineWriting()) + ", ");
         
-        str += vars[vars.size()-1]->ToString(pctx.InlineWriting());
+        str += vars[vars.size()-1]->GetType()->GetName() + " " + vars[vars.size()-1]->ToString(pctx.InlineWriting());
     }
     str+= " )\n" + tabs + "{\n";
     

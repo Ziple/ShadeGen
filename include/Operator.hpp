@@ -3,21 +3,34 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "PrintingContext.hpp"
 
 class Context;
 class Variable;
+class Type;
 
 class Operator
 {
     public:
         
-        Operator( Context* ctx, const std::vector<Operator*> subops = std::vector<Operator*>() );
+        typedef std::map< Type* , Type* > TypeCorrespondanceTable;
+
+        Operator(
+            Context* ctx,
+            const std::vector<Operator*> subops = std::vector<Operator*>(),
+            Type* type = 0 );
         
         virtual ~Operator();
-        
-        virtual Operator* Simplified( Context* nctx ) {}
+
+        virtual Operator* Simplified(
+            Context* nctx,
+            TypeCorrespondanceTable& correspondanceTable ) = 0;
+
+        virtual void ResolveTypes() {}
+
+        Type* GetType() const { return myType; }
         
         std::vector<const Variable*> GetVariables() const;
         
@@ -39,6 +52,7 @@ class Operator
         
         Context* myContext;
         std::vector<Operator*> mySubOps;
+        Type* myType;
 };
 
 #endif // __SC_OPERATOR_HPP__

@@ -1,5 +1,6 @@
 #include <Context.hpp>
 #include <Operator.hpp>
+#include <Types/Type.hpp>
 
 Context::Context( Context* parent ):
  myParent( parent )
@@ -12,6 +13,24 @@ Context::~Context()
     // when its own destructor is called.
     while( !myRegisteredOperators.empty() )
         delete myRegisteredOperators[0];
+}
+
+Type* Context::GetTypeByName( const std::string& name )
+{
+    Type* ret = 0;
+    
+    for( size_t i = 0; i < myRegisteredTypes.size(); i++ )
+        if( myRegisteredTypes[i]->GetName() == name )
+        {
+            ret = myRegisteredTypes[i];
+            break;
+        }
+
+    if( ret == 0
+        && myParent != 0 )
+        ret = myParent->GetTypeByName( name );
+        
+    return ret;
 }
 
 void Context::RegisterFunction( Function* fn )

@@ -6,7 +6,7 @@ ForBlock::ForBlock(
     Instruction* start,
     Operator* cond,
     Instruction* incr,
-    Instruction* block ):
+    InstructionList* block ):
  Instruction( ctx )
 {
     mySubOps.push_back( start );
@@ -35,14 +35,17 @@ std::string ForBlock::ToString( const PrintingContext& pctx ) const
     return str;
 }
 
-Operator* ForBlock::Simplified( Context* nctx )
+Operator* ForBlock::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
-    Instruction *sstart, *sincr, *sblock;
+    Instruction *sstart, *sincr;
+    InstructionList *sblock;
     Operator *scond;
-    sstart = mySubOps[0] != 0 ? reinterpret_cast<Instruction*>( mySubOps[0]->Simplified( nctx ) ): 0;
-    scond = mySubOps[1] != 0 ? mySubOps[1]->Simplified( nctx ) : 0;
-    sincr = mySubOps[2] != 0 ? reinterpret_cast<Instruction*>( mySubOps[2]->Simplified( nctx ) ): 0;
-    sblock = mySubOps[3] != 0 ? reinterpret_cast<Instruction*>( mySubOps[3]->Simplified( nctx ) ): 0;
+    sstart = mySubOps[0] != 0 ? reinterpret_cast<Instruction*>( mySubOps[0]->Simplified( nctx, table ) ): 0;
+    scond = mySubOps[1] != 0 ? mySubOps[1]->Simplified( nctx, table ) : 0;
+    sincr = mySubOps[2] != 0 ? reinterpret_cast<Instruction*>( mySubOps[2]->Simplified( nctx, table ) ): 0;
+    sblock = mySubOps[3] != 0 ? reinterpret_cast<InstructionList*>( mySubOps[3]->Simplified( nctx, table ) ): 0;
     
     // if the condition is never met or there is absolutely
     // nothing in the loop, remove the for block and replace it with a noop

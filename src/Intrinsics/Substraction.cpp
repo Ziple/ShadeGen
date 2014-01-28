@@ -6,10 +6,12 @@ Substraction::Substraction( Context* ctx, Operator* first, Operator* second) :
 BinaryOperator( ctx, first, second )
 {}
 
-Operator* Substraction::Simplified( Context* nctx )
+Operator* Substraction::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
-    Operator* sf = mySubOps[0]->Simplified(nctx);
-    Operator* ss = mySubOps[1]->Simplified(nctx);
+    Operator* sf = mySubOps[0]->Simplified(nctx, table);
+    Operator* ss = mySubOps[1]->Simplified(nctx, table);
     
     if( sf->IsConstant() && ss->IsConstant() )
     {

@@ -3,11 +3,21 @@
 
 InstructionList::InstructionList(
     Context* ctx,
+    Instruction* ins ):
+ Instruction( ctx )
+{
+    mySubOps.push_back( ins );
+    BuildReturnInstructionCache();
+}
+
+InstructionList::InstructionList(
+    Context* ctx,
     std::vector<Instruction*> ops
 ):
  Instruction( ctx )
 {
     mySubOps.insert( mySubOps.end(), ops.begin(), ops.end() );
+    BuildReturnInstructionCache();
 }
 
 bool InstructionList::IsInstructionList() const
@@ -34,13 +44,15 @@ std::string InstructionList::ToString( const PrintingContext& pctx ) const
     return str;
 }
 
-Operator* InstructionList::Simplified( Context* nctx )
+Operator* InstructionList::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
     std::vector<Instruction*> sops;
     
     for( size_t i = 0; i < mySubOps.size(); i++ )
     {
-        Instruction* sop = reinterpret_cast<Instruction*>( mySubOps[i]->Simplified(nctx) );
+        Instruction* sop = reinterpret_cast<Instruction*>( mySubOps[i]->Simplified(nctx, table) );
         
         if( sop->IsNoOp() == false )
             sops.push_back( sop );
@@ -50,4 +62,8 @@ Operator* InstructionList::Simplified( Context* nctx )
         return new InstructionList( nctx, sops );
     else
         return new NoOperation( nctx );
+}
+
+void InstructionList::BuildReturnInstructionCache()
+{
 }

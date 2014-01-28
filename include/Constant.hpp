@@ -5,11 +5,21 @@
 
 #include <sstream>
 
+class Type;
+
 class Constant: public Operator
 {
 public:
     
-    Constant( Context* ctx, double val );
+    Constant(
+        Context* ctx,
+        double val,
+        Type* type = 0 );
+
+    Operator* Simplified( Context* nctx, TypeCorrespondanceTable& correspondanceTable )
+    {
+        return new Constant( nctx, myValue, correspondanceTable[GetType()] );
+    }
     
     bool IsConstant() const;
     

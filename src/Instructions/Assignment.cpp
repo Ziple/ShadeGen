@@ -18,10 +18,12 @@ std::string Assignment::ToString( const PrintingContext& pctx ) const
            + mySubOps[1]->ToString( pctx.InlineWriting() ) + ";";
 }
 
-Operator* Assignment::Simplified( Context* nctx )
+Operator* Assignment::Simplified(
+    Context* nctx,
+    TypeCorrespondanceTable& table )
 {
-    Variable* slval = reinterpret_cast<Variable*>( mySubOps[0]->Simplified(nctx) );
-    Operator* srval = mySubOps[1]->Simplified(nctx);
+    Variable* slval = reinterpret_cast<Variable*>( mySubOps[0]->Simplified(nctx, table) );
+    Operator* srval = mySubOps[1]->Simplified(nctx, table);
     
     if( srval->IsVariable() )
     {
@@ -30,6 +32,6 @@ Operator* Assignment::Simplified( Context* nctx )
         if( slval->ToString() == srval->ToString() )
             return new NoOperation( nctx );
     }
-    else
-        return new Assignment( nctx, slval, srval );
+
+    return new Assignment( nctx, slval, srval );
 }

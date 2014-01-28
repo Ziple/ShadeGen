@@ -5,11 +5,21 @@
 
 #include <string>
 
+class Type;
+
 class Variable: public Operator
 {
 public:
     
-    Variable( Context* ctx, const std::string& name );
+    Variable(
+        Context* ctx,
+        const std::string& name,
+        Type* type = 0 );
+
+    Operator* Simplified( Context* nctx, TypeCorrespondanceTable& correspondanceTable )
+    {
+        return new Variable( nctx, myName, correspondanceTable[GetType()] );
+    }
     
     bool IsVariable() const;
     
