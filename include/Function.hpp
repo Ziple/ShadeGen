@@ -4,13 +4,15 @@
 #include "Operator.hpp"
 #include "Context.hpp"
 
+#include <Utils/SharablePointer.hpp>
+
 #include <string>
 #include <vector>
 
 class Variable;
 class InstructionList;
 
-class Function: public Operator
+class Function : public Operator, public Sharable<Function>
 {
 public:
     

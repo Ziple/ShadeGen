@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-BinaryOperator::BinaryOperator( Context* ctx, Operator* first, Operator* second ):
+BinaryOperator::BinaryOperator( Operator::Ptr first, Operator::Ptr second ):
  Operator( ctx )
 {
     mySubOps.push_back(first);

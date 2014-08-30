@@ -3,7 +3,9 @@
 
 #include "UnaryOperator.hpp"
 
-class Log: public UnaryOperator
+#include <Utils/SharablePointer.hpp>
+
+class Log : public UnaryOperator, public Sharable<Log>
 {
 public:
     Log( Context* ctx, Operator* op );

@@ -3,7 +3,9 @@
 
 #include "Operator.hpp"
 
-class UnaryOperator: public Operator
+#include <Utils/SharablePointer.hpp>
+
+class UnaryOperator : public Operator, public Sharable<UnaryOperator>
 {
     public:
         

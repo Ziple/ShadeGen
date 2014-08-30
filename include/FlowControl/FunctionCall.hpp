@@ -3,11 +3,13 @@
 
 #include "../Instructions/Instruction.hpp"
 
+#include <Utils/SharablePointer.hpp>
+
 #include <vector>
 
 class Function;
 
-class FunctionCall: public Instruction
+class FunctionCall : public Instruction, public Sharable<FunctionCall>
 {
 public:
     

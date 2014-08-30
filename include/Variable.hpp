@@ -3,11 +3,13 @@
 
 #include "Operator.hpp"
 
+#include <Utils/SharablePointer.hpp>
+
 #include <string>
 
 class Type;
 
-class Variable: public Operator
+class Variable: public Operator, public Sharable<Variable>
 {
 public:
     

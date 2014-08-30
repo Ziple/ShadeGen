@@ -3,7 +3,9 @@
 
 #include "../Instructions/InstructionList.hpp"
 
-class ForBlock: public Instruction
+#include <Utils/SharablePointer.hpp>
+
+class ForBlock : public Instruction, public Sharable<ForBlock>
 {
 public:
     

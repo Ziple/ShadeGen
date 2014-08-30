@@ -3,7 +3,9 @@
 
 #include "../Instructions/Instruction.hpp"
 
-class Return: public Instruction
+#include <Utils/SharablePointer.hpp>
+
+class Return : public Instruction, public Sharable<Return>
 {
 public:
     

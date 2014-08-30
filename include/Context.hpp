@@ -1,6 +1,11 @@
 #ifndef __SC_CONTEXT_HPP__
 #define __SC_CONTEXT_HPP__
 
+#include <Utils/SharablePointer.hpp>
+
+#include "Function.hpp"
+#include "Types/Type.hpp"
+
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -9,25 +14,21 @@ class Operator;
 class Function;
 class Type;
 
-class Context
+class Context : public Sharable<Context>
 {
     public:
         
-        Context( Context* parent = 0 );
+        Context( Context::Ptr parent = 0 );
         
         virtual ~Context();
 
-        virtual Context* GetGlobalContext() { return myParent != 0 ? myParent->GetGlobalContext() : 0; }
+        virtual Context::Ptr GetGlobalContext() { return myParent != 0 ? myParent->GetGlobalContext() : 0; }
         
-        Type* GetTypeByName( const std::string& name );
+        Type::Ptr GetTypeByName( const std::string& name );
 
-        virtual void RegisterFunction( Function* fn );
+        virtual void RegisterFunction( Function::Ptr fn );
         
-        virtual void UnregisterFunction( Function* fn );
-        
-        void RegisterOperator( Operator* op );
-        
-        void UnregisterOperator( Operator* op );
+        virtual void UnregisterFunction( Function::Ptr fn );
         
         void RegisterVariableName( const std::string& name );
         
@@ -37,9 +38,8 @@ class Context
         
     protected:
         
-        Context* myParent;
-        std::vector<Type*> myRegisteredTypes;
-        std::vector<Operator*> myRegisteredOperators;
+        Context::Ptr myParent;
+        std::vector<Type::Ptr> myRegisteredTypes;
         std::vector<std::string> myRegisteredVariableNames;
 };
 

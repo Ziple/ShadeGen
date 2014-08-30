@@ -3,7 +3,9 @@
 
 #include "UnaryOperator.hpp"
 
-class Negate: public UnaryOperator
+#include <Utils/SharablePointer.hpp>
+
+class Negate : public UnaryOperator, public Sharable<Negate>
 {
 public:
     Negate( Context* ctx, Operator* op );

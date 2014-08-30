@@ -3,7 +3,9 @@
 
 #include "../Instructions/InstructionList.hpp"
 
-class IfElseBlock: public Instruction
+#include <Utils/SharablePointer.hpp>
+
+class IfElseBlock : public Instruction, public Sharable<IfElseBlock>
 {
 public:
     

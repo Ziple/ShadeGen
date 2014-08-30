@@ -3,9 +3,9 @@
 #include <Variable.hpp>
 
 Operator::Operator(
-    Context* ctx,
-    const std::vector<Operator*> subops,
-    Type* type ):
+    Context::Ptr ctx,
+    const std::vector<Operator::Ptr> subops,
+    Type::Ptr type ):
     myContext( ctx ),
     mySubOps( subops ),
     myType( type )
@@ -21,19 +21,19 @@ Operator::~Operator()
     myContext->UnregisterOperator( this );
 }
 
-std::vector< const Variable* > Operator::GetVariables() const
+std::vector< Variable::Ptr > Operator::GetVariables() const
 {   
-    std::vector<const Variable*> ret;
+    std::vector<Variable::Ptr> ret;
     
     if( IsVariable() )
-        ret.push_back(reinterpret_cast<const Variable*>(this));
+        ret.push_back(std::make_shared<Variable>(this));
     
-    for( std::vector<Operator*>::const_iterator iit = mySubOps.begin();
+    for( std::vector<Operator::Ptr>::const_iterator iit = mySubOps.begin();
         iit != mySubOps.end();
         iit++ )
    {
-        const std::vector<const Variable*>& sv = (*iit)->GetVariables();
-        for( std::vector<const Variable*>::const_iterator it = sv.begin();
+        const std::vector<Variable::Ptr>& sv = (*iit)->GetVariables();
+        for( std::vector<Variable::Ptr>::const_iterator it = sv.begin();
             it != sv.end();
             it++ )
             if( std::find( ret.begin(), ret.end(), *it ) == ret.end() )

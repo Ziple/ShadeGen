@@ -3,7 +3,9 @@
 
 #include "BinaryOperator.hpp"
 
-class Substraction: public BinaryOperator
+#include <Utils/SharablePointer.hpp>
+
+class Substraction : public BinaryOperator, public Sharable<Substraction>
 {
 public:
     Substraction( Context* ctx, Operator* first, Operator* second );

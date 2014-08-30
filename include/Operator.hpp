@@ -5,34 +5,38 @@
 #include <vector>
 #include <map>
 
+#include "Context.hpp"
+#include "Variable.hpp"
+#include "Types/Type.hpp"
+
 #include "PrintingContext.hpp"
+
+#include <Utils/SharablePointer.hpp>
+
 
 class Context;
 class Variable;
 class Type;
 
-class Operator
+class Operator : public Sharable<Operator>
 {
     public:
         
-        typedef std::map< Type* , Type* > TypeCorrespondanceTable;
+        typedef std::map< Type::Ptr , Type::Ptr > TypeCorrespondanceTable;
 
         Operator(
-            Context* ctx,
-            const std::vector<Operator*> subops = std::vector<Operator*>(),
-            Type* type = 0 );
+            const std::vector<Operator::Ptr> subops = std::vector<Operator::Ptr>(),
+            Type::Ptr type = 0 );
         
         virtual ~Operator();
 
-        virtual Operator* Simplified(
-            Context* nctx,
-            TypeCorrespondanceTable& correspondanceTable ) = 0;
+        virtual Operator::Ptr Simplified( TypeCorrespondanceTable& correspondanceTable ) = 0;
 
         virtual void ResolveTypes() {}
 
-        Type* GetType() const { return myType; }
+        Type::Ptr GetType() const { return myType; }
         
-        std::vector<const Variable*> GetVariables() const;
+        std::vector<Variable::Ptr> GetVariables() const;
         
         virtual bool IsInstruction() const;
         
@@ -50,9 +54,9 @@ class Operator
         
     protected:
         
-        Context* myContext;
-        std::vector<Operator*> mySubOps;
-        Type* myType;
+        Context::Ptr myContext;
+        std::vector<Operator::Ptr> mySubOps;
+        Type::Ptr myType;
 };
 
 #endif // __SC_OPERATOR_HPP__

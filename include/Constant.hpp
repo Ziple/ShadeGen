@@ -2,12 +2,13 @@
 #define __SC_CONSTANT_HPP__
 
 #include "Operator.hpp"
+#include <Utils/SharablePointer.hpp>
 
 #include <sstream>
 
 class Type;
 
-class Constant: public Operator
+class Constant : public Operator, public Sharable<Constant>
 {
 public:
     

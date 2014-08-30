@@ -3,15 +3,17 @@
 
 #include "Type.hpp"
 
+#include <Utils/SharablePointer.hpp>
+
 #include <vector>
 
-struct StructureField
+struct StructureField : public Sharable<StructureField>
 {
     Type* fieldType;
     std::string fieldName;
 };
 
-class Structure: public Type
+class Structure : public Type, public Sharable<Structure>
 {
 public:
     

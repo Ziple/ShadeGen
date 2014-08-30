@@ -2,9 +2,11 @@
 #define __NOOPERATION_HPP__
 
 #include "Instruction.hpp"
+#include <Utils/SharablePointer.hpp>
+
 #include <Context.hpp>
 
-class NoOperation: public Instruction
+class NoOperation : public Instruction, public Sharable<NoOperation>
 {
 public:
     

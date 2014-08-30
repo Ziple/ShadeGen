@@ -2,22 +2,17 @@
 #include <Operator.hpp>
 #include <Types/Type.hpp>
 
-Context::Context( Context* parent ):
+Context::Context( Context::Ptr parent ):
  myParent( parent )
 {
 }
 
 Context::~Context()
-{
-    // the operator will be removed from the container
-    // when its own destructor is called.
-    while( !myRegisteredOperators.empty() )
-        delete myRegisteredOperators[0];
-}
+{}
 
-Type* Context::GetTypeByName( const std::string& name )
+Type::Ptr Context::GetTypeByName( const std::string& name )
 {
-    Type* ret = 0;
+    Type::Ptr ret = 0;
     
     for( size_t i = 0; i < myRegisteredTypes.size(); i++ )
         if( myRegisteredTypes[i]->GetName() == name )
@@ -33,29 +28,16 @@ Type* Context::GetTypeByName( const std::string& name )
     return ret;
 }
 
-void Context::RegisterFunction( Function* fn )
+void Context::RegisterFunction( Function::Ptr fn )
 {
     if( myParent != 0 )
         myParent->RegisterFunction(fn);
 }
 
-void Context::UnregisterFunction( Function* fn )
+void Context::UnregisterFunction( Function::Ptr fn )
 {
     if( myParent != 0 )
         myParent->UnregisterFunction(fn);
-}
-        
-void Context::RegisterOperator( Operator* op )
-{
-    if( std::find( myRegisteredOperators.begin(), myRegisteredOperators.end(), op ) == myRegisteredOperators.end() )
-        myRegisteredOperators.push_back( op );
-}
-
-void Context::UnregisterOperator( Operator* op )
-{
-    std::vector<Operator*>::iterator pos = std::find( myRegisteredOperators.begin(), myRegisteredOperators.end(), op );
-    if( pos != myRegisteredOperators.end() )
-        myRegisteredOperators.erase( pos );
 }
 
 void Context::RegisterVariableName( const std::string& name )

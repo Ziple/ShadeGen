@@ -3,9 +3,11 @@
 
 #include "BinaryOperator.hpp"
 
+#include <Utils/SharablePointer.hpp>
+
 class GlobalContext;
 
-class Multiplication: public BinaryOperator
+class Multiplication : public BinaryOperator, public Sharable<Multiplication>
 {
 public:
     Multiplication( Context* ctx, Operator* first, Operator* second );

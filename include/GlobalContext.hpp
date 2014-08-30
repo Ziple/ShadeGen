@@ -4,6 +4,8 @@
 #include "Context.hpp"
 #include "Operator.hpp"
 
+#include <Utils/SharablePointer.hpp>
+
 #include <string>
 #include <vector>
 #include <map>
@@ -13,7 +15,7 @@ class Operator;
 class Type;
 class Function;
 
-class GlobalContext: public Context
+class GlobalContext : public Context, public Sharable<GlobalContext>
 {
     public:
         

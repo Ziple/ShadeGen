@@ -3,7 +3,9 @@
 
 #include <Operator.hpp>
 
-class Instruction: public Operator
+#include <Utils/SharablePointer.hpp>
+
+class Instruction : public Operator, public Sharable<Instruction>
 {
     public:
         

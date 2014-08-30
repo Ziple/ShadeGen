@@ -38,8 +38,13 @@ int main( int argc, char** argv )
     
     std::vector<StructureField> fields;
 
-    StructureField t = { uintT, "x" };
-    StructureField tt = { uintT, "y" };
+	StructureField t;
+	t.fieldName = "x";
+	t.fieldType = uintT;
+
+    StructureField tt;
+	tt.fieldName = "y";
+	tt.fieldType = uintT;
 
     fields.push_back( t );
     fields.push_back( tt );

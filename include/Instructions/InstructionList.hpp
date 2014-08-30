@@ -3,11 +3,13 @@
 
 #include "Instruction.hpp"
 
+#include <Utils/SharablePointer.hpp>
+
 #include <vector>
 
 class Return;
 
-class InstructionList: public Instruction
+class InstructionList : public Instruction, public Sharable<InstructionList>
 {
 public:
 

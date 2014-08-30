@@ -3,9 +3,11 @@
 
 #include "Type.hpp"
 
+#include <Utils/SharablePointer.hpp>
+
 #include <string>
 
-class ScalarType: public Type
+class ScalarType : public Type, public Sharable<ScalarType>
 {
 public:
     
@@ -21,7 +23,7 @@ public:
 };
 
 
-class BoolType: public ScalarType
+class BoolType : public ScalarType, public Sharable<BoolType>
 {
 public:
     
@@ -32,7 +34,7 @@ public:
     const std::string& GetReducedName() const { static std::string b = "b"; return b; }
 };
 
-class Uint32Type: public ScalarType
+class Uint32Type : public ScalarType, public Sharable<Uint32Type>
 {
 public:
     
@@ -43,7 +45,7 @@ public:
     const std::string& GetReducedName() const { static std::string b = "u"; return b; }
 };
 
-class Int32Type: public ScalarType
+class Int32Type : public ScalarType, public Sharable<Int32Type>
 {
 public:
     
@@ -54,7 +56,7 @@ public:
     const std::string& GetReducedName() const { static std::string b = "i"; return b; }
 };
 
-class HalfType: public ScalarType
+class HalfType : public ScalarType, public Sharable<HalfType>
 {
 public:
     
@@ -65,7 +67,7 @@ public:
     const std::string& GetReducedName() const { static std::string b = "h"; return b; }
 };
 
-class FloatType: public ScalarType
+class FloatType : public ScalarType, public Sharable<FloatType>
 {
 public:
     
@@ -76,7 +78,7 @@ public:
     const std::string& GetReducedName() const { static std::string b = "f"; return b; }
 };
 
-class DoubleType: public ScalarType
+class DoubleType : public ScalarType, public Sharable<DoubleType>
 {
 public:
     

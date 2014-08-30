@@ -3,7 +3,9 @@
 
 #include "UnaryOperator.hpp"
 
-class Inverse: public UnaryOperator
+#include <Utils/SharablePointer.hpp>
+
+class Inverse : public UnaryOperator, public Sharable<Inverse>
 {
 public:
     

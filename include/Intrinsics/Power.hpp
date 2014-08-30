@@ -3,7 +3,9 @@
 
 #include "BinaryOperator.hpp"
 
-class Power: public BinaryOperator
+#include <Utils/SharablePointer.hpp>
+
+class Power : public BinaryOperator, public Sharable<Power>
 {
 public:
     Power( Context* ctx, Operator* first, Operator* second );

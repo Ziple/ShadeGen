@@ -1,12 +1,14 @@
 #ifndef __SC_TYPE_HPP__
 #define __SC_TYPE_HPP__
 
+#include <Utils/SharablePointer.hpp>
+
 #include <GlobalContext.hpp>
 #include <PrintingContext.hpp>
 
 #include <string>
 
-class Type
+class Type : public Sharable<Type>
 {
 public:
     

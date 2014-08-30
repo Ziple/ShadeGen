@@ -3,7 +3,9 @@
 
 #include "BinaryOperator.hpp"
 
-class Division: public BinaryOperator
+#include <Utils/SharablePointer.hpp>
+
+class Division : public BinaryOperator, public Sharable<Division>
 {
     
 public:

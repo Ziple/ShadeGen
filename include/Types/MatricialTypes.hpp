@@ -3,12 +3,15 @@
 
 #include "Type.hpp"
 #include "ScalarTypes.hpp"
+
+#include <Utils/SharablePointer.hpp>
+
 #include <Helpers.hpp>
 
 #include <string>
 
 
-class MatricialType: public Type
+class MatricialType : public Type, public Sharable<MatricialType>
 {
 public:
     
@@ -37,7 +40,7 @@ public:
 };
 
 // vector types
-class Vector2Type: public MatricialType
+class Vector2Type : public MatricialType, public Sharable<Vector2Type>
 {
 public:
     
@@ -46,7 +49,7 @@ public:
     {}
 };
 
-class Vector3Type: public MatricialType
+class Vector3Type : public MatricialType, public Sharable<Vector3Type>
 {
 public:
     
@@ -55,7 +58,7 @@ public:
     {}
 };
 
-class Vector4Type: public MatricialType
+class Vector4Type : public MatricialType, public Sharable<Vector4Type>
 {
 public:
     
@@ -65,7 +68,7 @@ public:
 };
 
 // realisations
-class Vector2FloatType: public Vector2Type
+class Vector2FloatType : public Vector2Type, public Sharable<Vector2FloatType>
 {
 public:
     Vector2FloatType( GlobalContext* ctx ):
@@ -73,7 +76,7 @@ public:
     {}
 };
 
-class Vector3FloatType: public Vector3Type
+class Vector3FloatType : public Vector3Type, public Sharable<Vector3FloatType>
 {
 public:
     Vector3FloatType( GlobalContext* ctx ):
@@ -81,7 +84,7 @@ public:
     {}
 };
 
-class Vector4FloatType: public Vector4Type
+class Vector4FloatType : public Vector4Type, public Sharable<Vector4FloatType>
 {
 public:
     Vector4FloatType( GlobalContext* ctx ):
@@ -91,7 +94,7 @@ public:
 
 
 // matricial types
-class Matrix4x4Type: public MatricialType
+class Matrix4x4Type : public MatricialType, public Sharable<Matrix4x4Type>
 {
 public:
     
@@ -100,7 +103,7 @@ public:
     {}
 };
 
-class Matrix3x4Type: public MatricialType
+class Matrix3x4Type : public MatricialType, public Sharable<Matrix3x4Type>
 {
 public:
     
@@ -109,7 +112,7 @@ public:
     {}
 };
 
-class Matrix4x3Type: public MatricialType
+class Matrix4x3Type : public MatricialType, public Sharable<Matrix4x3Type>
 {
 public:
     
@@ -118,7 +121,7 @@ public:
     {}
 };
 
-class Matrix3x3Type: public MatricialType
+class Matrix3x3Type : public MatricialType, public Sharable<Matrix3x3Type>
 {
 public:
     
@@ -128,7 +131,7 @@ public:
 };
 
 //Realisations
-class Matrix4x4FloatType: public Matrix4x4Type
+class Matrix4x4FloatType : public Matrix4x4Type, public Sharable<Matrix4x4FloatType>
 {
 public:
     
@@ -137,7 +140,7 @@ public:
    {}
 };
 
-class Matrix3x4FloatType: public Matrix3x4Type
+class Matrix3x4FloatType : public Matrix3x4Type, public Sharable<Matrix3x4FloatType>
 {
 public:
     
@@ -146,7 +149,7 @@ public:
     {}
 };
 
-class Matrix4x3FloatType: public Matrix4x3Type
+class Matrix4x3FloatType : public Matrix4x3Type, public Sharable<Matrix4x3FloatType>
 {
 public:
     
@@ -155,7 +158,7 @@ public:
     {}
 };
 
-class Matrix3x3FloatType: public Matrix3x3Type
+class Matrix3x3FloatType : public Matrix3x3Type, public Sharable<Matrix3x3FloatType>
 {
 public:
     

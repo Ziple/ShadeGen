@@ -3,31 +3,30 @@
 
 #include <algorithm>
 
-Addition::Addition(Context* ctx, Operator* first, Operator* second) :
- BinaryOperator( ctx, first, second )
+Addition::Addition(Operator::Ptr first, Operator::Ptr second) :
+ BinaryOperator( first, second )
 {}
 
-Operator* Addition::Simplified(
-    Context* nctx,
+Operator::Ptr Addition::Simplified(
     TypeCorrespondanceTable& correspondanceTable )
 {
-    Operator* sf = mySubOps[0]->Simplified(nctx, correspondanceTable);
-    Operator* ss = mySubOps[1]->Simplified(nctx, correspondanceTable);
+    Operator::Ptr sf = mySubOps[0]->Simplified(correspondanceTable);
+    Operator::Ptr ss = mySubOps[1]->Simplified(correspondanceTable);
     
     if( sf->IsConstant() && ss->IsConstant() )
     {
-        Constant* csf = reinterpret_cast<Constant*>(sf);
-        Constant* css = reinterpret_cast<Constant*>(ss);
+        Constant* csf = reinterpret_cast<Constant*>(sf.get());
+        Constant* css = reinterpret_cast<Constant*>(ss.get());
         
         double v = csf->GetValue() + css->GetValue();
-        return new Constant( nctx, v, correspondanceTable[GetType()] );
+        return std::make_shared<Constant>( v, correspondanceTable[GetType()] );
     }
     else if( sf->IsNull() )
         return ss;
     else if( ss->IsNull() )
         return sf;
     else
-        return new Addition( nctx, sf, ss );
+        return std::make_shared<Addition>( sf, ss );
 }
 
 std::string Addition::ToString(const PrintingContext& pctx) const

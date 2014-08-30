@@ -3,7 +3,9 @@
 
 #include <string>
 
-struct PrintingContext
+#include <Utils/SharablePointer.hpp>
+
+struct PrintingContext: public Sharable<PrintingContext>
 {
     PrintingContext(
         size_t tabLevel_ = 0,
